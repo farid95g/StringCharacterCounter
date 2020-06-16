@@ -1,7 +1,8 @@
 let text = document.getElementById("text");
 let warning = document.querySelector("span");
 let button = document.getElementById("submit");
-let table = document.querySelector("table tbody");
+let table = document.querySelector("table");
+let tableBody = document.querySelector("table tbody");
 
 function countCharacters(text) {
     let char_counter = {};
@@ -14,16 +15,20 @@ function countCharacters(text) {
     return char_counter;
 }
 
-text.addEventListener("keyup", function() {
+text.addEventListener("keyup", function(e) {
     if (this.value.trim() === "") {
         warning.style.display = "block";
+        table.classList.add("d-none");
     } else {
         warning.style.display = "none";
+    }
+    if (e.keyCode === 13) {
+        this.value = "";
     }
 });
 
 button.addEventListener("click", function() {
-    table.innerHTML = null;
+    tableBody.innerHTML = null;
     let counts = countCharacters(text.value);
     let i = 1;
     for (let char in counts) {
@@ -32,21 +37,23 @@ button.addEventListener("click", function() {
         number.setAttribute("scope", "row");
         number.innerText = i;
         let character = document.createElement("td");
-        character.innerText = char;
+        character.innerText = `" ${char} "`;
         let quantity = document.createElement("td");
         quantity.innerText = counts[char];
         row.appendChild(number);
         row.appendChild(character);
         row.appendChild(quantity);
-        table.appendChild(row);
+        tableBody.appendChild(row);
         i++;
     }
+    table.classList.remove("d-none");
+    text.value = "";
 });
 
 text.addEventListener("keypress", function(e) {
     if (e.keyCode === 13) {
         e.preventDefault();
-        table.innerHTML = null;
+        tableBody.innerHTML = null;
         let counts = countCharacters(text.value);
         let i = 1;
         for (let char in counts) {
@@ -55,14 +62,15 @@ text.addEventListener("keypress", function(e) {
             number.setAttribute("scope", "row");
             number.innerText = i;
             let character = document.createElement("td");
-            character.innerText = char;
+            character.innerText = `" ${char} "`;
             let quantity = document.createElement("td");
             quantity.innerText = counts[char];
             row.appendChild(number);
             row.appendChild(character);
             row.appendChild(quantity);
-            table.appendChild(row);
+            tableBody.appendChild(row);
             i++;
         }
+        table.classList.remove("d-none");
     }
 })
