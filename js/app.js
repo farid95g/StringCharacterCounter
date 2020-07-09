@@ -24,6 +24,7 @@ text.addEventListener("keyup", function(e) {
     }
     if (e.keyCode === 13) {
         this.value = "";
+        this.blur();
     }
 });
 
